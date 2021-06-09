@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -7,6 +7,9 @@ import Typography from "@material-ui/core/Typography";
 import Badge from "@material-ui/core/Badge";
 import MenuIcon from "@material-ui/icons/Menu";
 import ShoppingCart from "@material-ui/icons/ShoppingCart";
+import { CartContext } from "../../App";
+import { Drawer } from "@material-ui/core";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -29,7 +32,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const Navbaar = () => {
+
+const Navbaar = ({ count }) => {
+  const [cartProduct, setCartProduct] = useContext(CartContext);
+  const [open, setOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   const classes = useStyles();
   return (
     <div className={classes.grow}>
@@ -49,21 +64,28 @@ const Navbaar = () => {
 
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 0 new mails" color="inherit">
-              <Badge badgeContent={"0"} color="secondary">
+            <IconButton color="inherit">
+              <Badge badgeContent={cartProduct.toString()} color="secondary">
                 <ShoppingCart />
               </Badge>
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>
-            <IconButton aria-label="show 0 new mails" color="inherit">
-              <Badge badgeContent={"0"} color="secondary">
+            <IconButton color="inherit" onClick={handleDrawerOpen}>
+              <Badge badgeContent={cartProduct.toString()} color="secondary">
                 <ShoppingCart />
               </Badge>
             </IconButton>
           </div>
         </Toolbar>
       </AppBar>
+      <Drawer open={open}>
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            <ChevronRightIcon />
+          </IconButton>
+        </div>
+      </Drawer>
     </div>
   );
 };

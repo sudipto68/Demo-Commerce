@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import { IconButton, makeStyles } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import IndeterminateCheckBoxIcon from "@material-ui/icons/IndeterminateCheckBox";
+import { CartContext } from "../../App";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
   },
   rot: {
     maxWidth: 300,
+    height: 425,
+    borderRadius: 10,
   },
   media: {
     height: 250,
@@ -27,9 +30,27 @@ const ProductCard = ({ product }) => {
   const [count, setCount] = useState(0);
   const classes = useStyles();
 
+  const [cartProduct, setCartProduct] = useContext(CartContext);
+
   const handleAddToCart = () => {
     setShow(false);
   };
+
+  const handleCount = (type) => {
+    if (type === "add") {
+      setCount(count + 1);
+    } else {
+      if (count > 0) {
+        setCount(count - 1);
+      } else {
+        setCount(0);
+      }
+    }
+  };
+
+  useEffect(() => {
+    setCartProduct(count);
+  }, [count]);
 
   return (
     <>
@@ -42,15 +63,10 @@ const ProductCard = ({ product }) => {
           />
           <CardContent>
             <Typography gutterBottom variant="body1" component="h2">
-              {product.title}
+              {product.title.substring(0, 30)}
             </Typography>
-            <Typography
-              gutterBottom
-              variant="body2"
-              fontWeight={500}
-              component="h2"
-            >
-              Price: {product.price}$
+            <Typography gutterBottom variant="h6" component="h2">
+              {product.price}$
             </Typography>
           </CardContent>
         </CardActionArea>
@@ -65,13 +81,11 @@ const ProductCard = ({ product }) => {
             </Button>
           ) : (
             <div className={classes.root}>
-              <IconButton onClick={() => setCount(count + 1)}>
+              <IconButton onClick={() => handleCount("add")}>
                 <AddBoxIcon color="primary" fontSize="large" />
               </IconButton>
               {count}
-              <IconButton
-                onClick={() => (count > 0 ? setCount(count - 1) : setCount(0))}
-              >
+              <IconButton onClick={() => handleCount("minus")}>
                 <IndeterminateCheckBoxIcon color="primary" fontSize="large" />
               </IconButton>
             </div>
