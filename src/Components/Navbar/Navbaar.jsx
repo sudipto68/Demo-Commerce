@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -8,8 +8,7 @@ import Badge from "@material-ui/core/Badge";
 import MenuIcon from "@material-ui/icons/Menu";
 import ShoppingCart from "@material-ui/icons/ShoppingCart";
 import { CartContext } from "../../App";
-import { Drawer } from "@material-ui/core";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -34,17 +33,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navbaar = () => {
+  let history = useHistory();
   const { cart, setCart } = useContext(CartContext);
-  const [open, setOpen] = useState(false);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  const moveToCart = () => {
+    history.push("/cart");
   };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
   const classes = useStyles();
   return (
     <div className={classes.grow}>
@@ -64,14 +58,14 @@ const Navbaar = () => {
 
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton color="inherit">
+            <IconButton color="inherit" onClick={moveToCart}>
               <Badge badgeContent={cart.totalItems} color="secondary">
                 <ShoppingCart />
               </Badge>
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>
-            <IconButton color="inherit" onClick={handleDrawerOpen}>
+            <IconButton color="inherit" onClick={moveToCart}>
               <Badge badgeContent={cart.totalItems} color="secondary">
                 <ShoppingCart />
               </Badge>
@@ -79,13 +73,6 @@ const Navbaar = () => {
           </div>
         </Toolbar>
       </AppBar>
-      <Drawer open={open}>
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronRightIcon />
-          </IconButton>
-        </div>
-      </Drawer>
     </div>
   );
 };

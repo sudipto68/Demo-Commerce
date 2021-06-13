@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import ProductCard from "../ProductCard/ProductCard";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,6 +32,9 @@ const Products = () => {
   const classes = useStyles();
   return (
     <Container style={{ padding: 10 }}>
+      <Typography variant="h6" style={{ padding: 10 }}>
+        All Products
+      </Typography>
       <div className={classes.root}>
         <Grid container spacing={4}>
           {products.map((product) => {
