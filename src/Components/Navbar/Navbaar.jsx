@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Navbaar = ({ count }) => {
-  const [cartProduct, setCartProduct] = useContext(CartContext);
+const Navbaar = () => {
+  const { cart, setCart } = useContext(CartContext);
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
@@ -65,14 +65,14 @@ const Navbaar = ({ count }) => {
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton color="inherit">
-              <Badge badgeContent={cartProduct.toString()} color="secondary">
+              <Badge badgeContent={cart.totalItems} color="secondary">
                 <ShoppingCart />
               </Badge>
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>
             <IconButton color="inherit" onClick={handleDrawerOpen}>
-              <Badge badgeContent={cartProduct.toString()} color="secondary">
+              <Badge badgeContent={cart.totalItems} color="secondary">
                 <ShoppingCart />
               </Badge>
             </IconButton>

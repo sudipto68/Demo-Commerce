@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -6,9 +6,8 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { IconButton, makeStyles } from "@material-ui/core";
-import AddBoxIcon from "@material-ui/icons/AddBox";
-import IndeterminateCheckBoxIcon from "@material-ui/icons/IndeterminateCheckBox";
+import { makeStyles } from "@material-ui/core";
+
 import { CartContext } from "../../App";
 
 const useStyles = makeStyles((theme) => ({
@@ -26,31 +25,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProductCard = ({ product }) => {
-  const [show, setShow] = useState(true);
-  const [count, setCount] = useState(0);
   const classes = useStyles();
 
-  const [cartProduct, setCartProduct] = useContext(CartContext);
+  const { cart, setCart } = useContext(CartContext);
 
-  const handleAddToCart = () => {
-    setShow(false);
-  };
-
-  const handleCount = (type) => {
-    if (type === "add") {
-      setCount(count + 1);
-    } else {
-      if (count > 0) {
-        setCount(count - 1);
-      } else {
-        setCount(0);
-      }
+  const handleAddToCart = (products) => {
+    let _cart = { ...cart };
+    if (!_cart.items) {
+      _cart.items = {};
     }
-  };
+    if (_cart.items[product.id]) {
+      _cart.items[product.id] += 1;
+    } else {
+      _cart.items[product.id] = 1;
+    }
 
-  useEffect(() => {
-    setCartProduct(count);
-  }, [count]);
+    if (!_cart.totalItems) {
+      _cart.totalItems = 0;
+    }
+    _cart.totalItems += 1;
+
+    setCart(_cart);
+  };
 
   return (
     <>
@@ -71,25 +67,13 @@ const ProductCard = ({ product }) => {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          {show ? (
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={handleAddToCart}
-            >
-              Add to Cart
-            </Button>
-          ) : (
-            <div className={classes.root}>
-              <IconButton onClick={() => handleCount("add")}>
-                <AddBoxIcon color="primary" fontSize="large" />
-              </IconButton>
-              {count}
-              <IconButton onClick={() => handleCount("minus")}>
-                <IndeterminateCheckBoxIcon color="primary" fontSize="large" />
-              </IconButton>
-            </div>
-          )}
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={(e) => handleAddToCart(product)}
+          >
+            Add to Cart
+          </Button>
         </CardActions>
       </Card>
     </>
