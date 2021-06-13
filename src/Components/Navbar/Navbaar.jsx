@@ -34,7 +34,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbaar = () => {
   let history = useHistory();
-  const { cart, setCart } = useContext(CartContext);
+  const { cart } = useContext(CartContext);
+
+  const total = cart.reduce((acc, i) => acc + i.quantity, 0);
+  //console.log(total);
 
   const moveToCart = () => {
     history.push("/cart");
@@ -59,14 +62,14 @@ const Navbaar = () => {
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton color="inherit" onClick={moveToCart}>
-              <Badge badgeContent={cart.totalItems} color="secondary">
+              <Badge badgeContent={total.toString()} color="secondary">
                 <ShoppingCart />
               </Badge>
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>
             <IconButton color="inherit" onClick={moveToCart}>
-              <Badge badgeContent={cart.totalItems} color="secondary">
+              <Badge badgeContent={total.toString()} color="secondary">
                 <ShoppingCart />
               </Badge>
             </IconButton>

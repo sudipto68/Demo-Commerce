@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -7,8 +7,6 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core";
-
-import { CartContext } from "../../App";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,29 +22,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, i, handleAddToCart, products }) => {
   const classes = useStyles();
-
-  const { cart, setCart } = useContext(CartContext);
-
-  const handleAddToCart = (products) => {
-    let _cart = { ...cart };
-    if (!_cart.items) {
-      _cart.items = {};
-    }
-    if (_cart.items[product.id]) {
-      _cart.items[product.id] += 1;
-    } else {
-      _cart.items[product.id] = 1;
-    }
-
-    if (!_cart.totalItems) {
-      _cart.totalItems = 0;
-    }
-    _cart.totalItems += 1;
-
-    setCart(_cart);
-  };
 
   return (
     <>
@@ -70,7 +47,7 @@ const ProductCard = ({ product }) => {
           <Button
             color="primary"
             variant="contained"
-            onClick={(e) => handleAddToCart(product)}
+            onClick={() => handleAddToCart(i)}
           >
             Add to Cart
           </Button>
